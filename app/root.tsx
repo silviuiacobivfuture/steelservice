@@ -10,8 +10,6 @@ import {
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import styles from "./styles/index.css";
-import Navbar from "./components/navigation/Navbar";
-import Footer from "./components/Footer";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -32,13 +30,7 @@ export default function App() {
       </head>
       <body>
         <Theme>
-          <div className="min-h-screen bg-background flex flex-col">
-            <Navbar />
-            <main className="flex-1">
-              <Outlet />
-            </main>
-            <Footer />
-          </div>
+          <Outlet />
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
