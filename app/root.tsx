@@ -11,7 +11,7 @@ import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import appStylesHref from "./tailwind.css";
 
-import "./.server/domain.server";
+// import "./.server/domain.server";
 
 export const action = async () => {
   
