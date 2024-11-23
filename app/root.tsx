@@ -9,21 +9,17 @@ import {
 } from "@remix-run/react";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
-import appStylesHref from "./tailwind.css";
+import styles from "./styles/index.css";
+import Navbar from "./components/navigation/Navbar";
+import Footer from "./components/Footer";
 
-// import "./.server/domain.server";
-
-export const action = async () => {
-  
-};
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: styles },
+];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   return null;
 };
-
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: appStylesHref },
-];
 
 export default function App() {
   return (
@@ -36,16 +32,17 @@ export default function App() {
       </head>
       <body>
         <Theme>
-					<>
-            <div>
+          <div className="min-h-screen bg-background flex flex-col">
+            <Navbar />
+            <main className="flex-1">
               <Outlet />
-            </div>
-
-            <ScrollRestoration />
-            <Scripts />
-            <LiveReload />
-          </>
-				</Theme>
+            </main>
+            <Footer />
+          </div>
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </Theme>
       </body>
     </html>
   );

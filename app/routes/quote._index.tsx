@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Trash2, Plus } from 'lucide-react';
-import ContactSection from '@/components/ContactSection';
+import GetInTouch from '@/components/GetInTouch';
 import { useState } from 'react';
 
 interface QuoteItem {
@@ -376,7 +376,7 @@ export default function QuotePage() {
           </Button>
         </Form>
       </div>
-      <ContactSection />
+      <GetInTouch />
     </>
   );
 }

@@ -3,7 +3,7 @@ import { useLoaderData } from '@remix-run/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import ContactSection from '@/components/ContactSection';
+import GetInTouch from '@/components/GetInTouch';
 
 interface Service {
   id: string;
@@ -87,7 +87,7 @@ export default function ServicesPage() {
           ))}
         </div>
       </div>
-      <ContactSection />
+      <GetInTouch />
     </>
   );
 }

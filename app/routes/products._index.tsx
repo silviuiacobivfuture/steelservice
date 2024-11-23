@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, Filter } from 'lucide-react';
-import ContactSection from '@/components/ContactSection';
+import GetInTouch from '@/components/GetInTouch';
 import type { Product } from '@/types';
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -95,7 +95,7 @@ export default function ProductsPage() {
           ))}
         </div>
       </div>
-      <ContactSection />
+      <GetInTouch />
     </>
   );
 }
