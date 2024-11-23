@@ -32,7 +32,7 @@ export default function AdminSidebar() {
       <div className="p-4 border-b border-gray-800">
         <Link to="/admin" className="flex items-center gap-2">
           <Building2 className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold">Admin Panel</span>
+          <span className="text-xl font-bold">SteelService</span>
         </Link>
       </div>
 
