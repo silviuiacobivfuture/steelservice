@@ -36,3 +36,5 @@ tsconfig.tsbuildinfo
 /NOTES.md
 /RELEASENOTES.md
 /public/build
+.cache/*
+.cache/index-*

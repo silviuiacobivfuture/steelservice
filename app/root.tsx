@@ -10,6 +10,7 @@ import {
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import styles from "./styles/index.css";
+import { AuthProvider } from "./contexts/auth";
 import {UserProvider} from "@/context/userContext";
 import {sessionStorage} from "@/.server/session.server";
 
@@ -40,10 +41,12 @@ export default function App() {
       </head>
       <body>
         <Theme>
-          <Outlet />
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
+          <AuthProvider>
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+          </AuthProvider>
         </Theme>
       </body>
     </html>
