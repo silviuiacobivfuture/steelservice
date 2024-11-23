@@ -19,7 +19,3 @@ export const useUser = () => {
     }
     return context;
 };
-
-
-// To Access user anywhere in your app, you can use the useUser hook like this:
-//  const user = useUser();
