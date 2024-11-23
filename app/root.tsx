@@ -1,28 +1,38 @@
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import {json, LinksFunction, LoaderFunction} from "@remix-run/node";
 import {
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration,
+  ScrollRestoration, useLoaderData,
 } from "@remix-run/react";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import styles from "./styles/index.css";
 import { AuthProvider } from "./contexts/auth";
+import {UserProvider} from "@/context/userContext";
+import {sessionStorage} from "@/.server/session.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
 ];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return null;
+export let loader: LoaderFunction = async ({ request }) => {
+  const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+  const user = session.get("user") || null;
+
+  return json({ user });
 };
 
+
 export default function App() {
+  const { user } = useLoaderData<typeof loader>();
+
+
   return (
-    <html lang="en">
+      <UserProvider user={user}>
+      <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,5 +50,6 @@ export default function App() {
         </Theme>
       </body>
     </html>
+      </UserProvider>
   );
 }

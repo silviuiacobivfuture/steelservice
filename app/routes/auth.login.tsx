@@ -93,6 +93,9 @@ export default function LoginPage() {
                 Sign up
               </Link>
             </p>
+            <Link to="/auth/google" className="text-primary hover:underline">
+             Login with Google
+            </Link>
           </CardFooter>
         </Form>
       </Card>
