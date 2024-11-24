@@ -1,34 +1,34 @@
-import { useState } from 'react';
 import { json, type ActionFunctionArgs } from '@remix-run/node';
-import { Form, Link, useActionData } from '@remix-run/react';
+import {Form, Link, useActionData, useLoaderData} from '@remix-run/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building2 } from 'lucide-react';
+import {authenticator, isProviderEnabled} from "@/.server/auth.server";
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const email = formData.get('email');
-  const password = formData.get('password');
-
-  // Validate form data
-  const errors: { email?: string; password?: string } = {};
-  if (!email) errors.email = 'Email is required';
-  if (!password) errors.password = 'Password is required';
-
-  if (Object.keys(errors).length > 0) {
-    return json({ errors });
-  }
-
-  // TODO: Implement actual authentication logic
-  return json({ success: true });
+  return authenticator.authenticate("form", request, {
+    successRedirect: "/profile",
+    failureRedirect: "/auth/login",
+  });
 }
 
+export async function loader() {
+  return json({
+    enabledProviders: {
+      google: isProviderEnabled("google"),
+      facebook: isProviderEnabled("facebook"),
+    },
+  });
+}
+
+
 export default function LoginPage() {
+  const { enabledProviders } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const hasSocialProviders = enabledProviders.google || enabledProviders.facebook;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -52,8 +52,6 @@ export default function LoginPage() {
                 name="email"
                 type="email"
                 placeholder="name@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 required
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-errormessage={actionData?.errors?.email ? "email-error" : undefined}
@@ -70,8 +68,6 @@ export default function LoginPage() {
                 id="password"
                 name="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-errormessage={actionData?.errors?.password ? "password-error" : undefined}
@@ -93,6 +89,44 @@ export default function LoginPage() {
                 Sign up
               </Link>
             </p>
+            {hasSocialProviders && (
+                <div className="mt-6">
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-300" />
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-gray-50 text-gray-500">
+                  Or continue with
+                </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 grid grid-cols-2 gap-3">
+                    {enabledProviders.facebook && (
+                        <Form action="/auth/facebook" method="post">
+                          <button
+                              type="submit"
+                              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                          >
+                            Facebook
+                          </button>
+                        </Form>
+                    )}
+
+                    {enabledProviders.google && (
+                        <Form action="/auth/google" method="post">
+                          <button
+                              type="submit"
+                              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                          >
+                            Google
+                          </button>
+                        </Form>
+                    )}
+                  </div>
+                </div>
+            )}
           </CardFooter>
         </Form>
       </Card>

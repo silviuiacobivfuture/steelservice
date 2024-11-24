@@ -1,14 +1,16 @@
-// import { createCookieSessionStorage } from "@remix-run/node";
+import { createCookieSessionStorage } from "@remix-run/node";
 
-// export const sessionStorage = createCookieSessionStorage({
-//     cookie: {
-//         name: "user",
-//         httpOnly: true,
-//         secure: process.env.NODE_ENV === "production",
-//         sameSite: "lax",
-//         path: "/",
-//         secrets: [process.env.SESSION_SECRET!], // Add to .env file
-//     },
-// });
+if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET is required");
+}
 
-// export const { getSession, commitSession, destroySession } = sessionStorage;
+export const sessionStorage = createCookieSessionStorage({
+    cookie: {
+        name: "_session",
+        sameSite: "lax",
+        path: "/",
+        httpOnly: true,
+        secrets: [process.env.SESSION_SECRET],
+        secure: process.env.NODE_ENV === "production",
+    },
+});

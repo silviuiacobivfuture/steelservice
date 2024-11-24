@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { json, type ActionFunctionArgs } from '@remix-run/node';
+import {json, type ActionFunctionArgs, redirect} from '@remix-run/node';
 import { Form, Link, useActionData } from '@remix-run/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building2 } from 'lucide-react';
+import {prisma} from "@/.server/domain.server";
+import bcrypt from "bcryptjs";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
@@ -28,8 +30,45 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ errors });
   }
 
-  // TODO: Implement actual registration logic
-  return json({ success: true });
+  const hashedPassword = await bcrypt.hash(data.password as string, 10);
+
+  const response = await prisma.user.create({
+    data: {
+      email: data.email as string,
+      localUser: {
+        create: {
+          password: hashedPassword,
+        }
+      },
+      profile: {
+        create: {
+          email: data.email as string,
+          firstName: data.firstName as string,
+          lastName: data.lastName as string,
+          phoneNumber: data.phoneNumber as string,
+          addressOne: data.addressOne as string,
+          addressTwo: data.addressTwo as string,
+          postalCode: data.postalCode as string,
+          entityType: {
+            create: {
+              name: 'Individual',
+            }
+          },
+          country: {
+            create: {
+              name: 'Romania',
+            }
+          }
+        }
+      },
+    },
+  })
+
+  if(!response) {
+    return json({ errors: { email: 'Email is already in use' } });
+  }
+
+  return redirect('/auth/login');
 }
 
 export default function RegisterPage() {
@@ -54,7 +93,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12">
       <Card className="w-full max-w-2xl mx-4">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-center gap-2 mb-6">
@@ -100,7 +139,8 @@ export default function RegisterPage() {
                 {actionData?.errors?.lastName && (
                   <p className="text-sm text-red-500" id="lastName-error">
                     {actionData.errors.lastName}
-                  </p> )}
+                  </p>
+                )}
               </div>
             </div>
             <div className="space-y-2">

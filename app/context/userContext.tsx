@@ -2,8 +2,6 @@ import React, { createContext, useContext } from "react";
 
 type User = {
     email: string;
-    name: string;
-    picture?: string;
 };
 
 const UserContext = createContext<User | null>(null);
