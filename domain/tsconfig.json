@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "allowJs": true,
+    "module": "CommonJS",
+    "target": "ES2022",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@*": ["./src/*"],
+      "@generated-prisma-client": ["./generated/prisma-client"]
+    }
+  },
+  "include": ["src/**/*.ts", "prisma/client/**/*.*"],
+  "exclude": ["node_modules", "dist"]
+}

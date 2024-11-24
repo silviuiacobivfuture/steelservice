@@ -1,0 +1,42 @@
+//// # Enums # ////
+
+enum AssetType {
+  product_image
+  quote_documentation
+  invoice
+}
+
+enum QuoteStatus {
+  draft
+  analysis
+  offer
+  accepted
+  pending
+  delivered
+}
+
+enum ActionType {
+  Created
+  Updated
+  Deleted
+}
+
+enum TargetType {
+  Asset
+  CalculatorFormula
+  Country
+  Currency
+  Customer
+  MeasurementUnit
+  Profile
+  Quote
+  QuoteType
+  QuoteeInput
+  RequestMessage
+  Role
+  Service
+  TechnicalAttribute
+  User
+  UserCustomer
+  UserRole
+}

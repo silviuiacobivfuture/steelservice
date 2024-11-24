@@ -1,0 +1,18 @@
+model QuoteAsset {
+  id                        String  @id @default(uuid())
+  quoteId                   String
+  quoteImages               Quote   @relation("QuoteImages", fields: [quoteId], references: [id])
+  technicalDocumentsQuoteId String?
+  technicalDocuments        Quote?  @relation("QuoteTechnicalDocuments", fields: [technicalDocumentsQuoteId], references: [id])
+  assetId                   String
+  asset                     Asset   @relation(fields: [assetId], references: [id])
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+
+  @@unique([quoteId, assetId], name: "unique_quote_asset")
+}

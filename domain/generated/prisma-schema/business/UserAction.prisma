@@ -1,0 +1,9 @@
+model UserAction {
+  id         Int        @id @default(autoincrement())
+  actionType ActionType
+  user       User       @relation("UserActions", fields: [userId], references: [id])
+  userId     String // Changed from Int to String to match User.id
+  targetType String // The name of the target model, e.g., "Product"
+  targetId   Int // ID of the target record in the specific model
+  timestamp  DateTime   @default(now())
+}

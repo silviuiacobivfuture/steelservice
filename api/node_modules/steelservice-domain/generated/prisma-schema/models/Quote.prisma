@@ -1,0 +1,31 @@
+model Quote {
+  id            String      @id @default(uuid())
+  clientId      String
+  client        User        @relation("QuoteClient", fields: [clientId], references: [id])
+  agentId       String?
+  agent         User?       @relation("QuoteAgent", fields: [agentId], references: [id])
+  typeId        String
+  type          QuoteType   @relation(fields: [typeId], references: [id])
+  invoiceId     String?     @unique
+  invoice       Asset?      @relation("QuoteInvoice", fields: [invoiceId], references: [id])
+  quoteeInputId String      @unique
+  quoteeInput   QuoteeInput @relation(fields: [quoteeInputId], references: [id])
+  forCustomerId String?
+  forCustomer   Customer?   @relation(fields: [forCustomerId], references: [id])
+  status        QuoteStatus @default(draft)
+  chatRoomId    String?     @db.Text
+
+  products                ProductQuote[]
+  images                  QuoteAsset[]                  @relation("QuoteImages")
+  technicalDocuments      QuoteAsset[]                  @relation("QuoteTechnicalDocuments")
+  quoteeSelectedServices  QuoteeProductService[]
+  quoteProductInputValues QuoteProductAttributeQuotee[]
+  requests                RequestMessage[]
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+}

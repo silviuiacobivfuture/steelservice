@@ -1,0 +1,17 @@
+model TechnicalAttributeProduct {
+  id                     String             @id @default(uuid())
+  insertableForQuotation Boolean            @default(false)
+  productId              String
+  product                Product            @relation(fields: [productId], references: [id])
+  attributeId            String
+  attribute              TechnicalAttribute @relation(fields: [attributeId], references: [id])
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+
+  @@unique([productId, attributeId], name: "unique_product_attribute")
+}

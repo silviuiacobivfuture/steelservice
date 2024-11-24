@@ -1,0 +1,10 @@
+model UserLocal {
+  id       String @id @default(uuid())
+  password String @db.Text
+
+  // Relation to base User model
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  @@index([userId])
+}

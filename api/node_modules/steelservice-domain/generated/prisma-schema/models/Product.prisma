@@ -1,0 +1,22 @@
+model Product {
+  id          String             @id @default(uuid())
+  description String?            @db.Text
+  formulaId   String?
+  formula     CalculatorFormula? @relation(fields: [formulaId], references: [id])
+  materialId  String
+  material    Material           @relation(fields: [materialId], references: [id])
+
+  images                       ProductAsset[]
+  attributes                   TechnicalAttributeProduct[]
+  services                     ProductService[]
+  productQuotes                ProductQuote[]
+  quoteeProductServices        QuoteeProductService[]
+  quoteProductAttributeQuotees QuoteProductAttributeQuotee[]
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+}

@@ -1,0 +1,17 @@
+model Asset {
+  id       String    @id @default(uuid())
+  type     AssetType
+  assetUrl String    @db.Text
+
+  productAssets ProductAsset[]
+  quoteAssets   QuoteAsset[]
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+
+  quote Quote? @relation("QuoteInvoice")
+}

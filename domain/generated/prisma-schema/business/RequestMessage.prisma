@@ -1,0 +1,14 @@
+model RequestMessage {
+  id        String  @id @default(uuid())
+  message   String  @db.Text
+  satisfied Boolean @default(false)
+  quoteId   String
+  quote     Quote   @relation(fields: [quoteId], references: [id])
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+}

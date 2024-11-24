@@ -1,0 +1,18 @@
+model CalculatorFormula {
+  id          String  @id @default(uuid())
+  name        String  @db.Text
+  description String? @db.Text
+  calculates  String  @db.Text
+  formula     String  @db.Text
+
+  products Product[]
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+
+  @@unique([name], name: "unique_calculator_formula_name")
+}

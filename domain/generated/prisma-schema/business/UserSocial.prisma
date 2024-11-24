@@ -1,0 +1,12 @@
+model UserSocial {
+  id           String @id @default(uuid())
+  providerName String // e.g., "google", "facebook"
+  email        String // The ID given by the provider
+
+  // Relation to base User model
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  @@unique([providerName, email])
+  @@index([userId])
+}

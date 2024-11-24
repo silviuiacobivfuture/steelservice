@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: dev_postgres
+    environment:
+      POSTGRES_USER: dev       # Replace with your preferred username
+      POSTGRES_PASSWORD: dev  # Replace with your preferred password
+      POSTGRES_DB: steelservice_dev       # Replace with your preferred database name
+    ports:
+      - "5432:5432"  # Exposes PostgreSQL on localhost:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persists data even if the container is stopped
+
+volumes:
+  postgres_data:

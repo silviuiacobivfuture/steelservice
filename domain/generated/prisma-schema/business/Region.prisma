@@ -1,0 +1,15 @@
+model Region {
+  id        String  @id @default(uuid())
+  name      String  @db.Text
+  countryId String
+  country   Country @relation(fields: [countryId], references: [id])
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+
+  @@unique([name, countryId], name: "unique_region_country")
+}

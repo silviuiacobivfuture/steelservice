@@ -1,0 +1,21 @@
+model TechnicalAttribute {
+  id              String          @id @default(uuid())
+  name            String          @db.Text
+  var             String          @db.VarChar(20)
+  unitId          String
+  unit            MeasurementUnit @relation(fields: [unitId], references: [id])
+  selectionValues String[]        @default([])
+
+  productAttributes  TechnicalAttributeProduct[]
+  materialAttributes TechnicalAttributeMaterial[]
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+
+  @@unique([var], name: "unique_technical_attribute_var")
+  @@index([var], name: "idx_technical_attribute_var")
+}

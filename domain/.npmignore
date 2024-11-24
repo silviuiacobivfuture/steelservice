@@ -1,0 +1,13 @@
+devops
+node_modules/
+.environment
+.env.example
+.env
+docs/
+migrations/
+scripts/
+tsconfig.json
+steelservice-domain-*
+src/
+dbml/
+prisma-schema/

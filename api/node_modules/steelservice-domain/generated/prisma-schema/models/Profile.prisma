@@ -1,0 +1,23 @@
+model Profile {
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  firstName    String     @db.Text
+  lastName     String     @db.Text
+  email        String     @unique @db.Text
+  phoneNumber  String     @db.Text
+  addressOne   String     @db.Text
+  addressTwo   String?    @db.Text
+  postalCode   String     @db.Text
+  entityTypeId String
+  entityType   EntityType @relation(fields: [entityTypeId], references: [id])
+  countryId    String
+  country      Country    @relation(fields: [countryId], references: [id])
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+}

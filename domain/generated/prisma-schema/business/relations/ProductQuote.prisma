@@ -1,0 +1,18 @@
+model ProductQuote {
+  id        String  @id @default(uuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quoteId   String
+  quote     Quote   @relation(fields: [quoteId], references: [id])
+  quantity  Int
+  comment   String? @db.Text
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+
+  @@unique([productId, quoteId], name: "unique_product_quote")
+}

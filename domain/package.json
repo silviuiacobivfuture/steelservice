@@ -1,0 +1,36 @@
+{
+  "name": "steelservice-domain",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "prisma:generate": "prisma generate --schema=./generated/prisma-schema",
+    "prisma:format": "prisma format --schema=./generated/prisma-schema",
+    "prisma:migrate:dev": "prisma migrate dev --schema=./generated/prisma-schema",
+    "prisma:migrate:reset": "prisma migrate reset --force --schema=./generated/prisma-schema",
+    "prisma:studio": "prisma studio --schema=./generated/prisma-schema",
+    "utils:schema:concat": "ts-node ./scripts/concatPrismaFiles.ts",
+    "utils:db:start": "docker-compose -f devops/docker-compose.yml up -d",
+    "utils:db:stop": "docker-compose -f devops/docker-compose.yml down",
+    "utils:db:restart": "npm run db:stop && npm run db:start",
+    "utils:package:link": "npm link",
+    "utils:package:build": "npm run prisma:generate && npm run build",
+    "utils:package:pack": "npm run prisma:generate && npm run build && npm pack",
+    "utils:dev:init": "npm install && npm run utils:package:build && npm run utils:package:link",
+    "start:dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/yargs": "^17.0.33",
+    "prisma": "^5.22.0",
+    "prisma-dbml-generator": "^0.12.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "yargs": "^17.7.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  }
+}

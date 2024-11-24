@@ -1,0 +1,15 @@
+model QuoteType {
+  id   String @id @default(uuid())
+  name String @db.Text
+
+  quotes Quote[]
+
+  // Audit fields
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  updatedById String?
+  deletedById String?
+
+  @@unique([name], name: "unique_quote_type_name")
+}
