@@ -3,8 +3,10 @@ import { Building2, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import MobileNav from './MobileNav';
 import DesktopNav from './DesktopNav';
+import { User } from '@/types';
 
-const Navbar = () => {
+const Navbar = ({ user }: { user: User }) => {
+  console.log(user, '@@@@@@@@@user');
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
