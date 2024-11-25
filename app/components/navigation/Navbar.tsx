@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import MobileNav from './MobileNav';
 import DesktopNav from './DesktopNav';
 
-const Navbar = ({ quotesTotal }: { quotesTotal: number }) => {
+const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -20,13 +20,9 @@ const Navbar = ({ quotesTotal }: { quotesTotal: number }) => {
           <Button variant="ghost" size="sm" className="relative" asChild>
             <Link to="/quote">
               <FileText className="h-5 w-5" />
-              {
-                quotesTotal > 0 || quotesTotal === -1 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-                    {quotesTotal || 0}
-                  </span>
-                )
-              }
+              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
+                 0
+              </span>
             </Link>
           </Button>
           <div className="hidden md:flex gap-2">
