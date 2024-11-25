@@ -1,104 +1,121 @@
-import { useSearchParams } from '@remix-run/react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { X } from 'lucide-react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react';
+} from "@/components/ui/select";
 
-export default function ProductFilters() {
-  const [searchParams, setSearchParams] = useSearchParams();
+interface FilterProps {
+  onFilterChange: (filters: any) => void;
+  activeFilters: Record<string, string[]>;
+  onClearFilters: () => void;
+}
 
-  const handleFilterChange = (key: string, value: string | null) => {
-    const newParams = new URLSearchParams(searchParams);
-    if (value && value !== 'all') {
-      newParams.set(key, value);
-    } else {
-      newParams.delete(key);
+export default function ProductFilters({ onFilterChange, activeFilters, onClearFilters }: FilterProps) {
+  const [dimensionRange, setDimensionRange] = useState({ min: '', max: '' });
+
+  const handleDimensionChange = (type: 'min' | 'max', value: string) => {
+    const newRange = { ...dimensionRange, [type]: value };
+    setDimensionRange(newRange);
+    if (newRange.min && newRange.max) {
+      onFilterChange({ dimension: [`${newRange.min}-${newRange.max}`] });
     }
-    setSearchParams(newParams);
   };
 
-  const clearFilters = () => {
-    const newParams = new URLSearchParams();
-    const search = searchParams.get('search');
-    if (search) newParams.set('search', search);
-    setSearchParams(newParams);
-  };
-
-  const hasFilters = ['category', 'material', 'inStock'].some(key => 
-    searchParams.has(key)
-  );
+  const hasActiveFilters = Object.values(activeFilters).some(filters => filters.length > 0);
 
   return (
-    <Card className="h-fit">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-lg font-semibold">Filters</CardTitle>
-        {hasFilters && (
+    <Card>
+      <CardContent className="p-6 space-y-6">
+        {/* Material Type */}
+        <div className="space-y-2">
+          <Label>Material Type</Label>
+          <Select onValueChange={(value) => onFilterChange({ material: [value] })}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select material" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="carbon">Carbon Steel</SelectItem>
+              <SelectItem value="stainless">Stainless Steel</SelectItem>
+              <SelectItem value="alloy">Alloy Steel</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Grade */}
+        <div className="space-y-2">
+          <Label>Grade</Label>
+          <Select onValueChange={(value) => onFilterChange({ grade: [value] })}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select grade" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="a36">A36</SelectItem>
+              <SelectItem value="a572">A572</SelectItem>
+              <SelectItem value="a514">A514</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Dimensions */}
+        <div className="space-y-2">
+          <Label>Thickness Range (mm)</Label>
+          <div className="grid grid-cols-2 gap-2">
+            <Input
+              type="number"
+              placeholder="Min"
+              value={dimensionRange.min}
+              onChange={(e) => handleDimensionChange('min', e.target.value)}
+            />
+            <Input
+              type="number"
+              placeholder="Max"
+              value={dimensionRange.max}
+              onChange={(e) => handleDimensionChange('max', e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Active Filters */}
+        {hasActiveFilters && (
+          <div className="space-y-2">
+            <Label>Active Filters</Label>
+            <div className="flex flex-wrap gap-2">
+              {Object.entries(activeFilters).map(([key, values]) =>
+                values.map((value) => (
+                  <Badge key={`${key}-${value}`} variant="secondary">
+                    {key}: {value}
+                    <button
+                      onClick={() => onFilterChange({ [key]: values.filter(v => v !== value) })}
+                      className="ml-1"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Clear Filters */}
+        {hasActiveFilters && (
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearFilters}
-            className="h-8 px-2 lg:px-3"
+            variant="outline"
+            onClick={onClearFilters}
+            className="w-full"
           >
-            Clear
-            <X className="ml-2 h-4 w-4" />
+            Clear All Filters
           </Button>
         )}
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <Label>Category</Label>
-          <Select
-            value={searchParams.get('category') || 'all'}
-            onValueChange={(value) => handleFilterChange('category', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="All Categories" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="Structural Steel">Structural Steel</SelectItem>
-              <SelectItem value="Stainless Steel">Stainless Steel</SelectItem>
-              <SelectItem value="Carbon Steel">Carbon Steel</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Material</Label>
-          <Select
-            value={searchParams.get('material') || 'all'}
-            onValueChange={(value) => handleFilterChange('material', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="All Materials" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Materials</SelectItem>
-              <SelectItem value="Carbon Steel">Carbon Steel</SelectItem>
-              <SelectItem value="Stainless Steel">Stainless Steel</SelectItem>
-              <SelectItem value="Alloy Steel">Alloy Steel</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <Label htmlFor="inStock">In Stock Only</Label>
-          <Switch
-            id="inStock"
-            checked={searchParams.get('inStock') === 'true'}
-            onCheckedChange={(checked) => 
-              handleFilterChange('inStock', checked ? 'true' : null)
-            }
-          />
-        </div>
       </CardContent>
     </Card>
   );

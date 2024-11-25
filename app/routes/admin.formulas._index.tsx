@@ -8,54 +8,47 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Search, Edit, Trash2 } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Plus, Search, Edit, Trash2 } from 'lucide-react';
 
-interface Material {
+interface CalculatorFormula {
   id: string;
   name: string;
-  attributes: Array<{
-    attribute: {
-      name: string;
-    };
-  }>;
-  products: Array<{
-    id: string;
-  }>;
+  description?: string;
+  calculates: string;
+  formula: string;
   createdAt: string;
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // TODO: Replace with actual Prisma query
-  const materials: Material[] = [
+  const formulas: CalculatorFormula[] = [
     {
       id: '1',
-      name: 'Carbon Steel',
-      attributes: [
-        { attribute: { name: 'Tensile Strength' } },
-        { attribute: { name: 'Hardness' } },
-      ],
-      products: [{ id: '1' }],
+      name: 'Steel Weight',
+      description: 'Calculate steel plate weight',
+      calculates: 'weight',
+      formula: 'length * width * thickness * density',
       createdAt: new Date().toISOString(),
     },
   ];
 
-  return json({ materials });
+  return json({ formulas });
 }
 
-export default function MaterialsPage() {
-  const { materials } = useLoaderData<typeof loader>();
+export default function FormulasPage() {
+  const { formulas } = useLoaderData<typeof loader>();
 
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Materials</h1>
+        <h1 className="text-3xl font-bold">Calculator Formulas</h1>
         <Button asChild>
-          <Link to="/admin/materials/new">
+          <Link to="/admin/formulas/new">
             <Plus className="h-4 w-4 mr-2" />
-            Add Material
+            Add Formula
           </Link>
         </Button>
       </div>
@@ -64,7 +57,7 @@ export default function MaterialsPage() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Search materials..."
+            placeholder="Search formulas..."
             className="pl-10"
           />
         </div>
@@ -75,31 +68,40 @@ export default function MaterialsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Technical Attributes</TableHead>
-              <TableHead>Products</TableHead>
+              <TableHead>Calculates</TableHead>
+              <TableHead>Formula</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {materials.map((material) => (
-              <TableRow key={material.id}>
-                <TableCell className="font-medium">{material.name}</TableCell>
+            {formulas.map((formula) => (
+              <TableRow key={formula.id}>
                 <TableCell>
-                  <div className="flex flex-wrap gap-1">
-                    {material.attributes.map((attr, index) => (
-                      <Badge key={index} variant="secondary">
-                        {attr.attribute.name}
-                      </Badge>
-                    ))}
+                  <div>
+                    <div className="font-medium">{formula.name}</div>
+                    {formula.description && (
+                      <div className="text-sm text-muted-foreground">
+                        {formula.description}
+                      </div>
+                    )}
                   </div>
                 </TableCell>
-                <TableCell>{material.products.length} products</TableCell>
-                <TableCell>{new Date(material.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <Badge variant="outline">{formula.calculates}</Badge>
+                </TableCell>
+                <TableCell>
+                  <code className="px-2 py-1 bg-muted rounded text-sm">
+                    {formula.formula}
+                  </code>
+                </TableCell>
+                <TableCell>
+                  {new Date(formula.createdAt).toLocaleDateString()}
+                </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" size="sm" asChild>
-                      <Link to={`/admin/materials/${material.id}`}>
+                      <Link to={`/admin/formulas/${formula.id}`}>
                         <Edit className="h-4 w-4" />
                       </Link>
                     </Button>

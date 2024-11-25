@@ -12,16 +12,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Edit, Trash2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-interface Material {
+interface Region {
   id: string;
   name: string;
-  attributes: Array<{
-    attribute: {
-      name: string;
-    };
-  }>;
-  products: Array<{
+  country: {
+    name: string;
+  };
+  profiles: Array<{
     id: string;
   }>;
   createdAt: string;
@@ -29,45 +34,52 @@ interface Material {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // TODO: Replace with actual Prisma query
-  const materials: Material[] = [
+  const regions: Region[] = [
     {
       id: '1',
-      name: 'Carbon Steel',
-      attributes: [
-        { attribute: { name: 'Tensile Strength' } },
-        { attribute: { name: 'Hardness' } },
-      ],
-      products: [{ id: '1' }],
+      name: 'California',
+      country: { name: 'United States' },
+      profiles: [{ id: '1' }, { id: '2' }],
       createdAt: new Date().toISOString(),
     },
   ];
 
-  return json({ materials });
+  return json({ regions });
 }
 
-export default function MaterialsPage() {
-  const { materials } = useLoaderData<typeof loader>();
+export default function RegionsPage() {
+  const { regions } = useLoaderData<typeof loader>();
 
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Materials</h1>
+        <h1 className="text-3xl font-bold">Regions</h1>
         <Button asChild>
-          <Link to="/admin/materials/new">
+          <Link to="/admin/regions/new">
             <Plus className="h-4 w-4 mr-2" />
-            Add Material
+            Add Region
           </Link>
         </Button>
       </div>
 
-      <div className="flex items-center mb-6">
+      <div className="flex items-center gap-4 mb-6">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Search materials..."
+            placeholder="Search regions..."
             className="pl-10"
           />
         </div>
+        <Select>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by country" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="us">United States</SelectItem>
+            <SelectItem value="ca">Canada</SelectItem>
+            <SelectItem value="mx">Mexico</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="border rounded-lg">
@@ -75,31 +87,27 @@ export default function MaterialsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Technical Attributes</TableHead>
-              <TableHead>Products</TableHead>
+              <TableHead>Country</TableHead>
+              <TableHead>Users</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {materials.map((material) => (
-              <TableRow key={material.id}>
-                <TableCell className="font-medium">{material.name}</TableCell>
+            {regions.map((region) => (
+              <TableRow key={region.id}>
+                <TableCell className="font-medium">{region.name}</TableCell>
+                <TableCell>{region.country.name}</TableCell>
                 <TableCell>
-                  <div className="flex flex-wrap gap-1">
-                    {material.attributes.map((attr, index) => (
-                      <Badge key={index} variant="secondary">
-                        {attr.attribute.name}
-                      </Badge>
-                    ))}
-                  </div>
+                  <Badge variant="secondary">
+                    {region.profiles.length} users
+                  </Badge>
                 </TableCell>
-                <TableCell>{material.products.length} products</TableCell>
-                <TableCell>{new Date(material.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>{new Date(region.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" size="sm" asChild>
-                      <Link to={`/admin/materials/${material.id}`}>
+                      <Link to={`/admin/regions/${region.id}`}>
                         <Edit className="h-4 w-4" />
                       </Link>
                     </Button>

@@ -1,6 +1,5 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
-import { Button } from '@/components/ui/button';
+import { useLoaderData, Link } from '@remix-run/react';
 import {
   Table,
   TableBody,
@@ -10,7 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from '@/components/ui/badge';
-import { Plus, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ExternalLink, Plus } from 'lucide-react';
 
 interface Quote {
   id: string;
@@ -44,7 +44,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({ quotes });
 }
 
-export default function QuotesPage() {
+export default function MyQuotesPage() {
   const { quotes } = useLoaderData<typeof loader>();
 
   const getStatusColor = (status: string) => {
