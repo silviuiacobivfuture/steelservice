@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { Building2, Menu, FileText, ChevronDown, ChevronRight } from 'lucide-react';
 import { menuItems } from '@/lib/db/menu';
+import { User } from '@/types';
 
-const MobileMenu = () => {
+const MobileMenu = ({ user }: { user: User }) => {
   const [openCategories, setOpenCategories] = useState<string[]>([]);
 
   const toggleCategory = (category: string) => {
@@ -77,10 +78,11 @@ const MobileMenu = () => {
   );
 };
 
-const DesktopMenu = () => {
+const DesktopMenu = ({ user }: { user: User }) => {
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const timeoutRef = useRef<number | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  console.log(user, '@@@@@@@@@user');
 
   const handleMouseEnter = (category: string) => {
     if (timeoutRef.current) {
@@ -163,7 +165,7 @@ const DesktopMenu = () => {
   );
 };
 
-const Navbar = () => {
+const Navbar = ({ user }: { user: User }) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-20 items-center justify-between">

@@ -1,6 +1,10 @@
-import { authenticator } from "@/.server/auth.server";
-import {ActionFunctionArgs} from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { logout } from "@/lib/auth.server";
 
 export async function action({ request }: ActionFunctionArgs) {
-    await authenticator.logout(request, { redirectTo: "/auth/login" });
+  return logout(request);
+}
+
+export async function loader() {
+  return logout(new Request("GET"));
 }
